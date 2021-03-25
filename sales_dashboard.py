@@ -5,7 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 parse_dates = ['Order Date', 'Ship Date']
-df = pd.read_csv(r"C:\Users\king2\Documents\Sam Docs\Python\Data Apps\Sales Data Analysis\superstore.csv", parse_dates=parse_dates)
+df = pd.read_csv(
+    r"C:\Users\king2\Documents\Sam Docs\Python\Data Apps\Sales Data Analysis\superstore.csv",
+    parse_dates=parse_dates)
 df = df.drop(columns=["Row ID"])
 
 st.sidebar.header('Selection Control')
@@ -24,10 +26,10 @@ level = st.sidebar.selectbox('Choose Level of Analysis', ['Category', 'Sub-Categ
 st.header('Sales Data Analysis')
 
 if level == 'Category':
-    #Category DataFrame
+    # Category DataFrame
     profit_by_cat = df.groupby(['Category'], as_index=False).sum()
     profit_by_cat = profit_by_cat.drop(columns=['Postal Code']).sort_values(by='Profit', ascending=False)
-    #assign colors
+    # assign colors
     cats = profit_by_cat['Category'].tolist()
     palette = dict(zip(cats, sns.color_palette(n_colors=len(cats))))
     # Bar Chart
@@ -37,7 +39,7 @@ if level == 'Category':
     sns.barplot(profit_by_cat['Category'], y=profit_by_cat['Profit'], palette=palette)
     st.write(fig)
     # Line Chart
-    year_month_cat = df.groupby(['year_month','Category'], as_index=False).sum()
+    year_month_cat = df.groupby(['year_month', 'Category'], as_index=False).sum()
     fig = plt.figure(figsize=(10, 4))
     plt.xticks(rotation=90)
     sns.lineplot(data=year_month_cat, x="year_month", y="Profit", hue="Category", palette=palette)
@@ -46,19 +48,19 @@ if level == 'Category':
     fig.tight_layout()
     st.write(fig)
 elif level == 'Sub-Category':
-    #Sub-Category DataFrame
+    # Sub-Category DataFrame
     profit_by_sub_cat = df.groupby(['Sub-Category'], as_index=False).sum()
     profit_by_sub_cat = profit_by_sub_cat.drop(columns=['Postal Code']).sort_values(by='Profit', ascending=False)
-    #assign colors
+    # assign colors
     sub_cats = profit_by_sub_cat['Sub-Category'].tolist()
     palette = dict(zip(sub_cats, sns.color_palette(n_colors=len(sub_cats))))
-    #Bar Chart
+    # Bar Chart
     fig = plt.figure(figsize=(10, 4))
     plt.xticks(rotation=45)
     sns.barplot(profit_by_sub_cat['Sub-Category'], y=profit_by_sub_cat['Profit'], palette=palette)
     st.write(fig)
-    #Line Chart
-    year_month_subcat = df.groupby(['year_month','Sub-Category'], as_index=False).sum()
+    # Line Chart
+    year_month_subcat = df.groupby(['year_month', 'Sub-Category'], as_index=False).sum()
     fig = plt.figure(figsize=(10, 4))
     sns.lineplot(data=year_month_subcat, x="year_month", y="Profit", hue="Sub-Category", palette=palette)
     plt.xticks(rotation=90)
@@ -66,4 +68,3 @@ elif level == 'Sub-Category':
     fig.legend(bbox_to_anchor=[1, 1], loc='upper left', ncol=2)
     plt.tight_layout()
     st.write(fig)
-
