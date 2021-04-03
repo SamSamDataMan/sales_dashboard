@@ -37,18 +37,20 @@ df1 = df.groupby([level], as_index=False).sum()
 cats = df1[level].tolist()
 palette = dict(zip(cats, sns.color_palette(n_colors=len(cats))))
 
-#Map DF Processing
-stateDF = df.groupby(['State'],as_index=False).sum()
+# Map DF Processing
+stateDF = df.groupby(['State'], as_index=False).sum()
 us_state_abbrev = {
-'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO',
-'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
-'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA',
-'Maine': 'ME', 'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
-'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
-'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
-'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD',
-'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
-'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'}
+    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA', 'Colorado': 'CO',
+    'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID',
+    'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA', 'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA',
+    'Maine': 'ME', 'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS',
+    'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+    'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH', 'Oklahoma': 'OK',
+    'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC', 'South Dakota': 'SD',
+    'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
+    'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'
+}
+
 stateDF['StateAbv'] = stateDF['State'].map(us_state_abbrev)
 
 # Begin Main Page
@@ -73,12 +75,13 @@ st.write(fig)
 
 # Scatterplot
 fig = plt.figure(figsize=(10, 4))
-sns.scatterplot(data= df1, x = var_1, y = var_2, hue=level, palette=palette)
+sns.scatterplot(data=df1, x=var_1, y=var_2, hue=level, palette=palette)
 plt.legend().remove()
 fig.legend(bbox_to_anchor=[1.10, 1], loc='upper_left', ncol=1)
 fig.tight_layout()
 st.write(fig)
 
-#Map
-choromap = px.choropleth(locations = stateDF['StateAbv'], locationmode = 'USA-states', color = stateDF['Sales'], scope = 'usa',color_continuous_scale="Viridis")
+# Map
+choromap = px.choropleth(locations=stateDF['StateAbv'], locationmode='USA-states', color=stateDF['Sales'], scope='usa', 
+                         color_continuous_scale="Viridis")
 st.write(choromap)
