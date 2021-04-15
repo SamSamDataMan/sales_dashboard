@@ -23,15 +23,14 @@ a_date = st.sidebar.date_input("Choose Your Date Range", (min_date, max_date))
 df = df[(df['Order Date'] > a_date[0]) & (df['Order Date'] < a_date[1])]
 df['year'] = df['Order Date'].dt.year.astype(str)
 df['month'] = df['Order Date'].dt.month.astype(str)
-df['year_month'] = df['year'] + "_" + df['month']
+df['day'] = df['Order Date'].dt.day.astype(str)
+df['year_month'] = (df['month'] + "/1/" + df['year']).astype('datetime64[ns]').dt.date
 
 level = st.sidebar.selectbox('Choose Level of Analysis', ['Category', 'Sub-Category'])
 
 var_1 = st.sidebar.selectbox("Primary Variable", ("Profit", "Sales", "Quantity", "Discount"))
-st.write(var_1)
 
 var_2 = st.sidebar.selectbox("Secondary Variable", ("Profit", "Sales", "Quantity", "Discount"))
-st.write(var_2)
 
 df1 = df.groupby([level], as_index=False).sum()
 cats = df1[level].tolist()
@@ -65,7 +64,7 @@ st.write(fig)
 
 # Line Chart
 year_month_cat = df.groupby(['year_month', level], as_index=False).sum()
-fig = plt.figure(figsize=(10, 4))
+fig = plt.figure(figsize=(6, 4))
 plt.xticks(rotation=90)
 sns.lineplot(data=year_month_cat, x="year_month", y=var_1, hue=level, palette=palette)
 plt.legend().remove()
@@ -74,7 +73,7 @@ fig.tight_layout()
 st.write(fig)
 
 # Scatterplot
-fig = plt.figure(figsize=(10, 4))
+fig = plt.figure(figsize=(6, 4))
 sns.scatterplot(data=df1, x=var_1, y=var_2, hue=level, palette=palette)
 plt.legend().remove()
 fig.legend(bbox_to_anchor=[1.10, 1], loc='upper_left', ncol=1)
